@@ -1,12 +1,13 @@
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
+#include <SDL3_image/SDL_image.h>
 
-const int WINDOW_WIDTH = 512;  /*  Width of the game window to be created*/
-const int WINDOW_HEIGHT = 512; /*  Height of the game window to be created*/
+const int WINDOW_WIDTH = 1920;  /*  Width of the game window to be created*/
+const int WINDOW_HEIGHT = 1080; /*  Height of the game window to be created*/
 const int FRAME_COUNT = 8;     /*  Number of frames in the spritesheet */
 const int FRAME_WIDTH = 512;   /*  Width of the frame in the spritesheet */
 const int FRAME_HEIGHT = 512;  /*  Height of the frame in the spritesheet */
-const int ANIMATION_DELAY = 100;/* Number of iterations between the animation frames (determines delay) */
+const int ANIMATION_DELAY = 66;/* Number of iterations between the animation frames (determines delay) */
 
 /* Struct to store the current state*/
 struct AppState {
@@ -38,10 +39,16 @@ int main(int argc, char *argv[])
     AppState state;
 
     /* Load the texture into state.Texture */
-    // YOUR CODE HERE 
+    char spriteFile[] = "media/cartooncrypteque_character_skellywithahat_right.png";
+    SDL_Surface *surface = IMG_Load(spriteFile);
 
+    state.Texture = SDL_CreateTextureFromSurface(renderer, surface);
+    
     // Test to ensure texture was loaded
-
+    if (!state.Texture) {
+        SDL_Log("Couldn't create static texture: %s", SDL_GetError());
+        return SDL_APP_FAILURE;
+    }
 
     state.currentFrame = 0;
     state.lastFrameTime = 1;
@@ -66,11 +73,14 @@ int main(int argc, char *argv[])
         state.lastFrameTime += 1;
 
         // Change the frame if enough interations performed since the last
-        // YOUR CODE HERE 
-        // YOUR CODE HERE
+        if (state.lastFrameTime%ANIMATION_DELAY==0)
+        {
+            state.currentFrame+=1;
+            state.currentFrame%=FRAME_COUNT;
+        }
         
         // Set Background color to white
-        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 0);
         // Clear screen
         SDL_RenderClear(renderer);
 

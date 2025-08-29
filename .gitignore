@@ -1,0 +1,4 @@
+build/
+CMakeFiles/
+vendored/
+.DS_Store
