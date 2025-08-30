@@ -1,3 +1,6 @@
+#ifndef ENTITY_H
+#define ENTITY_H
+
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
 
@@ -17,7 +20,6 @@ class Entity
         SDL_Texture* texture_;
 
     public:
-
         Entity(float x, float y, float width, float height, SDL_Texture* texture)
             : x_(x), y_(y), width_(width), height_(height), texture_(texture) {}
 
@@ -101,3 +103,5 @@ class Entity
             isMovable_ = isMovable;
         }
 };
+
+#endif
