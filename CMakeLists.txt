@@ -9,6 +9,10 @@ set(CMAKE_CXX_STANDARD 17)
 add_subdirectory(vendored/SDL EXCLUDE_FROM_ALL)
 add_subdirectory(vendored/SDL_image EXCLUDE_FROM_ALL)
 
-add_executable(main ./src/main.cpp)
+add_executable(main
+  ./src/main.cpp
+  ./src/engine/engine.cpp
+  ./src/engine/entity.cpp
+)
 
 target_link_libraries(main PRIVATE SDL3_image::SDL3_image SDL3::SDL3)
