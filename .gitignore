@@ -2,3 +2,5 @@ build/
 CMakeFiles/
 vendored/
 .DS_Store
+src/engine/structs.cpp
+src/engine/structs.hpp

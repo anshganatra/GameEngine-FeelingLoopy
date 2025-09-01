@@ -23,6 +23,8 @@ bool Engine::init(const char* title, int width, int height) {
     return true;
 }
 
+
+
 void Engine::run() {
     if (!window_ || !renderer_) {
         return;
@@ -33,10 +35,14 @@ void Engine::run() {
     unsigned long long tick = 0ULL;
 
     while (running) {
+        // Handle keyboard input (moves controlled entity)
+        handleInput();
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_EVENT_QUIT) {
                 running = false;
             }
+            // Forward discrete events (mouse, keydown) to input module
+            handleEvent(event);
         }
 
         // Advance global tick used for animation pacing
@@ -112,6 +118,7 @@ void Engine::cleanup() {
     SDL_Quit();
 }
 
-void Engine::addEntity(const Entity &entity) {
+Entity* Engine::addEntity(const Entity &entity) {
     entities_.push_back(entity);
+    return &entities_.back();
 }

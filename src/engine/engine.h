@@ -8,6 +8,7 @@
 #include <iostream>
 #include <functional>
 #include <vector>
+#include "../keyboardInput.h"
 
 class Engine
 {
@@ -24,7 +25,7 @@ public:
     void run();
     void cleanup();
 
-    void addEntity(const Entity &entity);
+    Entity* addEntity(const Entity &entity);
 
     // Expose renderer for texture creation (read-only access)
     SDL_Renderer* getRenderer() const { return renderer_; }

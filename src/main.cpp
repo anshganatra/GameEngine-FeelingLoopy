@@ -2,6 +2,7 @@
 #include "engine/engine.h"
 #include "engine/entity.h"
 #include <SDL3_image/SDL_image.h>
+#include "keyboardInput.h"
 
 const int gameWindowWidth = 1200;
 const int gameWindowHeight = 800;
@@ -34,7 +35,8 @@ void initialiseEntities() {
     SDL_Texture* playerTexture = loadTexture(renderer, "media/darkworld_character_cainhurst_right.png");
     Entity player = Entity(2*gameWindowWidth/3, 2*gameWindowHeight/3, playerTexture->w/4, playerTexture->h, 
         0, 0, 0, 0, true, false, playerTexture, 4, 1, 33, 2, [](Entity&){});
-    engine.addEntity(player);
+    Entity* playerPtr = engine.addEntity(player);
+    setControlledEntity(playerPtr);
 
     if (!platformTexture || !droneTexture || !playerTexture) {
         if (platformTexture) SDL_DestroyTexture(platformTexture);

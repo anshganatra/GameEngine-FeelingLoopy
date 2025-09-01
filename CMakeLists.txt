@@ -13,6 +13,7 @@ add_executable(main
   ./src/main.cpp
   ./src/engine/engine.cpp
   ./src/engine/entity.cpp
+  ./src/keyboardInput.cpp
 )
 
 target_link_libraries(main PRIVATE SDL3_image::SDL3_image SDL3::SDL3)
