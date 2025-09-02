@@ -80,6 +80,54 @@ void Engine::run() {
                 e.setCurrentFrameRow(currentFrameRow);
             }
 
+            if(e.isMovable() && !e.isControllable() && (tick % static_cast<unsigned long long>(delay) == 0ULL)) {
+                // Auto-move along predefined path on animation ticks
+                if (e.hasPath()) {
+                    const auto &path = e.getPath();
+                    
+                    int idx = e.getNextPathIndex();
+                    if (idx >= 0 && idx < static_cast<int>(path.size())) {
+                        const float tx = path[idx].x;
+                        const float ty = path[idx].y;
+                        SDL_Log("Entity (%s) at (%.1f, %.1f) moving towards (%.1f, %.1f)\n", e.getName().c_str(), e.getX(), e.getY(), tx, ty);
+                        const float cx = e.getX();
+                        const float cy = e.getY();
+
+                        const float dx = tx - cx;
+                        const float dy = ty - cy;
+
+                        float vx = e.getVelocityX();
+                        float vy = e.getVelocityY();
+
+                        // If no velocity, nothing to do
+                        const float absVx = vx < 0 ? -vx : vx;
+                        const float absVy = vy < 0 ? -vy : vy;
+
+                        if (absVx == 0.0f && absVy == 0.0f) {
+                            // keep path index unchanged
+                        } else {
+                            // Move using velocity towards target (adjust sign)
+                            vx = (dx >= 0.0f ? absVx : -absVx);
+                            vy = (dy >= 0.0f ? absVy : -absVy);
+
+                            // If within one step, snap to target and advance
+                            if (dx*dx + dy*dy <= vx*vx + vy*vy) {
+                                e.setX(tx);
+                                e.setY(ty);
+                                // Advance to next point
+                                const int nextIdx = idx + 1;
+                                e.setNextPathIndex(nextIdx < static_cast<int>(path.size()) ? nextIdx : nextIdx % path.size());
+                            } else {
+                                e.setVelocityX(vx);
+                                e.setVelocityY(vy);
+                                e.setX(cx + vx);
+                                e.setY(cy + vy);
+                            }
+                        }
+                    }
+                }
+            }
+            
             // Allow custom per-entity updates
             e.update();
 

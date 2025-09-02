@@ -4,11 +4,14 @@
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
 #include <functional>
+#include <vector>
 
 class Entity
 {
 private:
     // TODO: Explore writing x,y as vectors
+    std::string name_;
+    
     float x_;
     float y_;
 
@@ -34,19 +37,24 @@ private:
 
     std::function<void(Entity &)> updateFunction_;
 
+    // Path-following state (for non-controllable, movable entities)
+    std::vector<SDL_FPoint> pathPoints_;
+    int nextPathIndex_;
+
 public:
 
     // Constructor for static entities (matches implementation in Entity.cpp)
-    Entity(float x, float y, float width, float height, SDL_Texture *texture,
+    Entity(std::string name, float x, float y, float width, float height, SDL_Texture *texture,
            int frameColumnCount, int frameRowCount, int animationDelay,
            const std::function<void(Entity &)> &updateFunction);
 
     // Constructor for Non-static entities (matches implementation in Entity.cpp)
-    Entity(float x, float y, float width, float height, float velocityX, float velocityY, float accelerationX,
+    Entity(std::string name, float x, float y, float width, float height, float velocityX, float velocityY, float accelerationX,
            float accelerationY, bool isMovable, bool isControllable, SDL_Texture *texture,
            int frameColumnCount, int frameRowCount, int animationDelay, float scale,
            const std::function<void(Entity &)> &updateFunction);
 
+    std::string getName() const;
     float getX() const;
     float getY() const;
     float getWidth() const;
@@ -65,7 +73,11 @@ public:
     int getAnimationDelay() const;
     std::function<void(Entity &)> getUpdateFunction() const;
     float getScale() const;
+    const std::vector<SDL_FPoint>& getPath() const;
+    int getNextPathIndex() const;
+    bool hasPath() const;
 
+    void setName(const std::string& name);
     void setX(float x);
     void setY(float y);
     void setWidth(float width);
@@ -84,6 +96,8 @@ public:
     void setAnimationDelay(int animationDelay);
     void setUpdateFunction(const std::function<void(Entity &)> &updateFunction);
     void setScale(float scale);
+    void setPath(const std::vector<SDL_FPoint>& pathPoints);
+    void setNextPathIndex(int index);
 
     void update();
 };
