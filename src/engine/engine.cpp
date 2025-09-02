@@ -1,5 +1,9 @@
 #include "engine.h"
 
+#include "physics.h"
+#include "collision.h"
+#include <utility>
+
 Engine::Engine()
     : window_(nullptr), renderer_(nullptr) {}
 
@@ -89,7 +93,7 @@ void Engine::run() {
                     if (idx >= 0 && idx < static_cast<int>(path.size())) {
                         const float tx = path[idx].x;
                         const float ty = path[idx].y;
-                        SDL_Log("Entity (%s) at (%.1f, %.1f) moving towards (%.1f, %.1f)\n", e.getName().c_str(), e.getX(), e.getY(), tx, ty);
+                        // SDL_Log("Entity (%s) at (%.1f, %.1f) moving towards (%.1f, %.1f)\n", e.getName().c_str(), e.getX(), e.getY(), tx, ty);
                         const float cx = e.getX();
                         const float cy = e.getY();
 
@@ -130,6 +134,11 @@ void Engine::run() {
             
             // Allow custom per-entity updates
             e.update();
+
+            // Apply physics (velocity, acceleration, collisions)
+            std::pair<std::pair<float,float>, std::pair<float,float>> targetVectors = Physics::applyPhysics(e);
+            
+            handle_collision(e, targetVectors.first.first, targetVectors.first.second, targetVectors.second.first, targetVectors.second.second);
 
             // Source rectangle from spritesheet
             SDL_FRect src { static_cast<float>(e.getCurrentFrameColumn()) * e.getWidth(), e.getCurrentFrameRow() * e.getHeight(), e.getWidth(), e.getHeight() };

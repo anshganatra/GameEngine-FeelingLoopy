@@ -26,6 +26,8 @@ private:
 
     bool isMovable_;
     bool isControllable_;
+    bool isAffectedByGravity;
+
     SDL_Texture *texture_;
 
     int frameColumnCount_;
@@ -45,13 +47,13 @@ public:
 
     // Constructor for static entities (matches implementation in Entity.cpp)
     Entity(std::string name, float x, float y, float width, float height, SDL_Texture *texture,
-           int frameColumnCount, int frameRowCount, int animationDelay,
+           int frameColumnCount, int frameRowCount, int animationDelay, bool isAffectedByGravity,
            const std::function<void(Entity &)> &updateFunction);
 
     // Constructor for Non-static entities (matches implementation in Entity.cpp)
     Entity(std::string name, float x, float y, float width, float height, float velocityX, float velocityY, float accelerationX,
            float accelerationY, bool isMovable, bool isControllable, SDL_Texture *texture,
-           int frameColumnCount, int frameRowCount, int animationDelay, float scale,
+           int frameColumnCount, int frameRowCount, int animationDelay, float scale, bool isAffectedByGravity,
            const std::function<void(Entity &)> &updateFunction);
 
     std::string getName() const;
@@ -65,6 +67,7 @@ public:
     float getAccelerationY() const;
     bool isMovable() const;
     bool isControllable() const;
+    bool getisAffectedByGravity() const;
     SDL_Texture *getTexture() const;
     int getFrameColumnCount() const;
     int getFrameRowCount() const;
@@ -76,7 +79,7 @@ public:
     const std::vector<SDL_FPoint>& getPath() const;
     int getNextPathIndex() const;
     bool hasPath() const;
-
+    
     void setName(const std::string& name);
     void setX(float x);
     void setY(float y);
@@ -89,6 +92,7 @@ public:
     void setTexture(SDL_Texture *texture);
     void setMovable(bool isMovable);
     void setControllable(bool isControllable);
+    void setisAffectedByGravity(bool val);
     void setFrameColumnCount(int frameColumnCount);
     void setFrameRowCount(int frameRowCount);
     void setCurrentFrameRow(int currentFrameRow);

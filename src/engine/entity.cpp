@@ -2,7 +2,7 @@
 
 // Constructor for the static entities
 // argument types are: (std::__1::string, int, double, const int, int, SDL_Texture *, int, int, int, lambda [](Entity &)->void)
-Entity::Entity(std::string name, float x, float y, float width, float height, SDL_Texture *texture, int frameColumnCount, int frameRowCount, int animationDelay, const std::function<void(Entity &)> &updateFunction)
+Entity::Entity(std::string name, float x, float y, float width, float height, SDL_Texture *texture, int frameColumnCount, int frameRowCount, int animationDelay, bool isAffectedByGravity, const std::function<void(Entity &)> &updateFunction)
     : 
     name_(name),
     x_(x),
@@ -22,6 +22,7 @@ Entity::Entity(std::string name, float x, float y, float width, float height, SD
     currentFrameColumn_(0),
     animationDelay_(animationDelay),
     scale_(1.0f),
+    isAffectedByGravity(isAffectedByGravity),
     updateFunction_(updateFunction),
     pathPoints_(),
     nextPathIndex_(-1) {}
@@ -31,7 +32,7 @@ Entity::Entity(std::string name, float x, float y, float width, float height, SD
 // Constructor for the Non-static entities
 Entity::Entity(std::string name, float x, float y, float width, float height, float velocityX, float velocityY, float accelerationX,
         float accelerationY, bool isMovable, bool isControllable, SDL_Texture *texture, int frameColumnCount,
-        int frameRowCount, int animationDelay, float scale, const std::function<void(Entity &)> &updateFunction)
+        int frameRowCount, int animationDelay, float scale, bool isAffectedByGravity, const std::function<void(Entity &)> &updateFunction)
     : name_(name),
       x_(x),
       y_(y),
@@ -50,6 +51,7 @@ Entity::Entity(std::string name, float x, float y, float width, float height, fl
       currentFrameColumn_(0),
       animationDelay_(animationDelay),
       scale_(scale),
+      isAffectedByGravity(isAffectedByGravity),
       updateFunction_(updateFunction),
       pathPoints_(),
       nextPathIndex_(0) {}
@@ -97,6 +99,10 @@ bool Entity::isMovable() const {
 
 bool Entity::isControllable() const {
     return isControllable_;
+}
+
+bool Entity::getisAffectedByGravity() const {
+    return isAffectedByGravity;
 }
 
 SDL_Texture* Entity::getTexture() const {
@@ -189,6 +195,10 @@ void Entity::setMovable(bool isMovable) {
 
 void Entity::setControllable(bool isControllable) {
     isControllable_ = isControllable;
+}
+
+void Entity::setisAffectedByGravity(bool val) {
+    isAffectedByGravity = val;
 }
 
 void Entity::setFrameColumnCount(int frameColumnCount) {

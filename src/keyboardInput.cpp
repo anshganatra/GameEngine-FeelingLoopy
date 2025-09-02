@@ -3,6 +3,11 @@
 #include <unordered_set>
 #include "engine/entity.h"
 
+// Update only velocity from keyboard input; no collision or position updates.
+
+// No collision or position helpers needed here
+
+
 static bool wasSpacePressed = false;
 static bool wasEnterPressed = false;
 static bool wasEscapePressed = false;
@@ -34,44 +39,26 @@ void handleInput()
         wasEscapePressed = isEscapePressed;
     }
 
-    // Movement Controls (WASD)
-    if (state[SDL_SCANCODE_W]) {
-        directionsLogged.insert(std::string("W"));
-        if (gControlledEntity) {
-            // Move up (decrease Y)
-            gControlledEntity->setY(gControlledEntity->getY() - 5.0f);
-        }
-    }
-    else if (state[SDL_SCANCODE_S]) {
-        directionsLogged.insert(std::string("S"));
-        if (gControlledEntity) {
-            // Move down (increase Y)
-            gControlledEntity->setY(gControlledEntity->getY() + 5.0f);
-        }
-    }
-    else {
-        directionsLogged.erase(std::string("W"));
-        directionsLogged.erase(std::string("S"));
-    }
+    // Movement Controls (WASD): increment velocity only, no position updates
+    // Note: we adjust existing velocity instead of replacing it
+    constexpr float speed = 2.0f; // per-input tick impulse
 
-    if (state[SDL_SCANCODE_A]) {
-        directionsLogged.insert(std::string("A"));
-        if (gControlledEntity) { 
-            // Move left (decrease X)
-            gControlledEntity->setX(gControlledEntity->getX() - 5.0f);
-        }
-    }
-    else if (state[SDL_SCANCODE_D])
-    {
-        directionsLogged.insert(std::string("D"));
-        if (gControlledEntity) {
-            // Move right (increase X)
-            gControlledEntity->setX(gControlledEntity->getX() + 5.0f);
-        }
-    }
-    else {
-        directionsLogged.erase(std::string("A"));
-        directionsLogged.erase(std::string("D"));
+    const bool up = state[SDL_SCANCODE_W];
+    const bool down = state[SDL_SCANCODE_S];
+    const bool left = state[SDL_SCANCODE_A];
+    const bool right = state[SDL_SCANCODE_D];
+
+    if (gControlledEntity) {
+        float vx = gControlledEntity->getVelocityX();
+        float vy = gControlledEntity->getVelocityY();
+
+        if (up)    { vy -= speed; directionsLogged.insert(std::string("W")); } else { directionsLogged.erase(std::string("W")); }
+        if (down)  { vy += speed; directionsLogged.insert(std::string("S")); } else { directionsLogged.erase(std::string("S")); }
+        if (left)  { vx -= speed; directionsLogged.insert(std::string("A")); } else { directionsLogged.erase(std::string("A")); }
+        if (right) { vx += speed; directionsLogged.insert(std::string("D")); } else { directionsLogged.erase(std::string("D")); }
+
+        gControlledEntity->setVelocityX(vx);
+        gControlledEntity->setVelocityY(vy);
     }
 
 

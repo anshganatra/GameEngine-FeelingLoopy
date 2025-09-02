@@ -29,6 +29,9 @@ public:
 
     // Expose renderer for texture creation (read-only access)
     SDL_Renderer* getRenderer() const { return renderer_; }
+
+    // Read-only access to entities for collision checks
+    const std::vector<Entity>& getEntities() const { return entities_; }
 };
 
 #endif

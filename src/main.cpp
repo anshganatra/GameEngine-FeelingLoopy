@@ -21,23 +21,23 @@ static SDL_Texture* loadTexture(SDL_Renderer* renderer, const char* path) {
 void initialiseEntities() {
     //Initialise Static Platform
     SDL_Texture* platformTexture = loadTexture(renderer, "media/wilderkin_platform_basicground_idle.png");
-    Entity platform(std::string("Platform"), -20.0f, gameWindowHeight - 0.66f * platformTexture->h, static_cast<float>(gameWindowWidth), static_cast<float>(platformTexture->h), platformTexture, 1, 1, 0, [](Entity&){});
+    Entity platform(std::string("Platform"), -20.0f, gameWindowHeight - 0.66f * platformTexture->h, static_cast<float>(gameWindowWidth), static_cast<float>(platformTexture->h), platformTexture, 1, 1, 0, false, [](Entity&){});
     engine.addEntity(platform);
 
     // Initialise Automoving entity
     SDL_Texture* droneTexture = loadTexture(renderer, "media/cyberpunk_enemy_drone_move.png");
     Entity drone(std::string("Drone"), gameWindowWidth/3, gameWindowHeight/3, droneTexture->w/8, droneTexture->h/8, 
-        2, 2, 0, 0, true, false, droneTexture, 8, 8, 20, 0.5, [](Entity&){});
+        0, 0, 0, 0, true, false, droneTexture, 8, 8, 20, 0.5, true, [](Entity&){});
     // Define path points for the drone to follow
-    drone.setPath({{gameWindowWidth/4, gameWindowHeight/4},
-                   {gameWindowWidth/2, gameWindowHeight/2},
-                   {gameWindowWidth*2/3, gameWindowHeight/3}});
+    // drone.setPath({{gameWindowWidth/4, gameWindowHeight/4},
+    //                {gameWindowWidth/2, gameWindowHeight/2},
+    //                {gameWindowWidth*2/3, gameWindowHeight/3}});
     engine.addEntity(drone);
 
     //Initialise Controllable Player Entity
     SDL_Texture* playerTexture = loadTexture(renderer, "media/darkworld_character_cainhurst_right.png");
-    Entity player(std::string("Player"), 2*gameWindowWidth/3, 2*gameWindowHeight/3, playerTexture->w/4, playerTexture->h, 
-        0, 0, 0, 0, true, false, playerTexture, 4, 1, 33, 2, [](Entity&){});
+    Entity player(std::string("Player"), 2*gameWindowWidth/3, gameWindowHeight/3, playerTexture->w/4, playerTexture->h, 
+        0, 0, 0, 0, true, false, playerTexture, 4, 1, 33, 2, true, [](Entity&){});
     Entity* playerPtr = engine.addEntity(player);
     setControlledEntity(playerPtr);
 
