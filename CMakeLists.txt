@@ -15,7 +15,6 @@ add_executable(main
   ./src/engine/engine.cpp
   ./src/engine/entity.cpp
   ./src/engine/collision.cpp
-  ./src/keyboardInput.cpp
   ./src/engine/physics.cpp
   ./src/input.cpp
   ./src/input_handler.cpp

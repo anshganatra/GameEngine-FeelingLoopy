@@ -2,7 +2,6 @@
 #include "engine/engine.h"
 #include "engine/entity.h"
 #include <SDL3_image/SDL_image.h>
-#include "keyboardInput.h"
 #include "input_handler.h"
 
 const int gameWindowWidth = 1200;
@@ -66,7 +65,7 @@ void initialiseEntities() {
         0, 0, 0, 0, true, true, false, false, playerTexture, 4, 1, 20, 1.5, true, [](Entity&){});
 
     Entity* playerPtr = engine.addEntity(player);
-    setControlledEntity(playerPtr);
+    input_handler::setControlledEntity(playerPtr);
 
     //setControlledEntity(playerPtr);            // legacy keyboard input module
 
