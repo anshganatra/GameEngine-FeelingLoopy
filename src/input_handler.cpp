@@ -59,8 +59,9 @@ static void applyMovement(Entity* ent, const input_handler::KeyMap& km)
         if (down && !up)    vy =  gMoveSpeed;
         ent->setVelocityY(vy);
     } else {
-        if (input::pressed(km.jump)) {
+        if (input::pressed(km.jump) && ent->isJumping() == false) {
             ent->setVelocityY(-gJumpImpulse);
+            ent->setJumping(true);
         }
     }
 }

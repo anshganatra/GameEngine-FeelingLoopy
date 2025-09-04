@@ -1,7 +1,7 @@
 #include "entity.h"
 
 // Constructor for the static entities
-Entity::Entity(std::string name, float x, float y, float width, float height, SDL_Texture *texture, int frameColumnCount, int frameRowCount, int animationDelay, bool isAffectedByGravity, const std::function<void(Entity &)> &updateFunction)
+Entity::Entity(std::string name, float x, float y, float width, float height, SDL_Texture *texture, int frameColumnCount, int frameRowCount, int animationDelay, bool isAffectedByGravity, bool isEnemy, bool isPlatform, const std::function<void(Entity &)> &updateFunction)
     : name_(name),
       x_(x),
       y_(y),
@@ -13,6 +13,10 @@ Entity::Entity(std::string name, float x, float y, float width, float height, SD
       accelerationY_(0.0f),
       isMovable_(false),
       isControllable_(false),
+      isEnemy_(isEnemy),
+      isJumping_(false),
+      isReset_(false),
+      isPlatform_(isPlatform),
       texture_(texture),
       frameColumnCount_(frameColumnCount),
       frameRowCount_(frameRowCount),
@@ -28,7 +32,7 @@ Entity::Entity(std::string name, float x, float y, float width, float height, SD
 
 // Constructor for the Non-static entities
 Entity::Entity(std::string name, float x, float y, float width, float height, float velocityX, float velocityY, float accelerationX,
-               float accelerationY, bool isMovable, bool isControllable, SDL_Texture *texture, int frameColumnCount,
+               float accelerationY, bool isMovable, bool isControllable, bool isEnemy, bool isPlatform, SDL_Texture *texture, int frameColumnCount,
                int frameRowCount, int animationDelay, float scale, bool isAffectedByGravity, const std::function<void(Entity &)> &updateFunction)
     : name_(name),
       x_(x),
@@ -41,6 +45,10 @@ Entity::Entity(std::string name, float x, float y, float width, float height, fl
       accelerationY_(accelerationY),
       isMovable_(isMovable),
       isControllable_(isControllable),
+      isEnemy_(isEnemy),
+      isJumping_(false),
+      isReset_(false),
+      isPlatform_(isPlatform),
       texture_(texture),
       frameColumnCount_(frameColumnCount),
       frameRowCount_(frameRowCount),
@@ -107,6 +115,26 @@ bool Entity::isMovable() const
 bool Entity::isControllable() const
 {
     return isControllable_;
+}
+
+bool Entity::isEnemy() const
+{
+    return isEnemy_;
+}
+
+bool Entity::isJumping() const
+{
+    return isJumping_;
+}
+
+bool Entity::isPlatform() const
+{
+    return isPlatform_;
+}
+
+bool Entity::isReset() const
+{
+    return isReset_;
 }
 
 bool Entity::getisAffectedByGravity() const
@@ -217,6 +245,26 @@ void Entity::setMovable(bool isMovable)
 void Entity::setControllable(bool isControllable)
 {
     isControllable_ = isControllable;
+}
+
+void Entity::setEnemy(bool val)
+{
+    isEnemy_ = val;
+}
+
+void Entity::setJumping(bool val)
+{
+    isJumping_ = val;
+}
+
+void Entity::setReset(bool val)
+{
+    isReset_ = val;
+}
+
+void Entity::isPlatform(bool val)
+{
+    isPlatform_ = val;
 }
 
 void Entity::setisAffectedByGravity(bool val)

@@ -100,7 +100,8 @@ void Engine::run()
     while (running)
     {
         ++tick;
-        if (tick % 30000000 == 0)
+        if (tick % 10000000 == 0)
+        if (tick % 10000000 == 0)
         {
             frame++;
 
@@ -125,6 +126,15 @@ void Engine::run()
             for (auto &e : entities_)
             {   
                 if (!input_handler::isPaused()) {
+
+                    if(e.isControllable() && e.isReset()) {
+                        e.setX(500);
+                        e.setY(-100);
+                        e.setVelocityX(0);
+                        e.setVelocityY(0);
+                        e.setReset(false);
+                    }
+
                     handleSpriteSheetAnimation(e, frame);
                     handleAutoMovingEntityUpdate(e);
                     

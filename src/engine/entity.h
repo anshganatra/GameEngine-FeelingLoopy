@@ -12,12 +12,12 @@ class Entity
 public:
     // Constructor for static entities (matches implementation in Entity.cpp)
     Entity(std::string name, float x, float y, float width, float height, SDL_Texture *texture,
-           int frameColumnCount, int frameRowCount, int animationDelay, bool isAffectedByGravity,
+           int frameColumnCount, int frameRowCount, int animationDelay, bool isAffectedByGravity, bool isEnemy, bool isPlatform,
            const std::function<void(Entity &)> &updateFunction);
 
     // Constructor for Non-static entities (matches implementation in Entity.cpp)
     Entity(std::string name, float x, float y, float width, float height, float velocityX, float velocityY, float accelerationX,
-           float accelerationY, bool isMovable, bool isControllable, SDL_Texture *texture,
+           float accelerationY, bool isMovable, bool isControllable, bool isEnemy, bool isPlatform, SDL_Texture *texture,
            int frameColumnCount, int frameRowCount, int animationDelay, float scale, bool isAffectedByGravity,
            const std::function<void(Entity &)> &updateFunction);
 
@@ -40,6 +40,10 @@ public:
     float getAccelerationY() const;
     bool isMovable() const;
     bool isControllable() const;
+    bool isEnemy() const;
+    bool isJumping() const;
+    bool isReset() const;
+    bool isPlatform() const;
     bool getisAffectedByGravity() const;
     SDL_Texture *getTexture() const;
     int getFrameColumnCount() const;
@@ -68,6 +72,10 @@ public:
     void setMovable(bool isMovable);
     void setControllable(bool isControllable);
     void setisAffectedByGravity(bool val);
+    void setEnemy(bool val);
+    void setJumping(bool val);
+    void setReset(bool val);
+    void isPlatform(bool val);
     void setFrameColumnCount(int frameColumnCount);
     void setFrameRowCount(int frameRowCount);
     void setCurrentFrameRow(int currentFrameRow);
@@ -99,6 +107,10 @@ private:
     bool isMovable_;
     bool isControllable_;
     bool isAffectedByGravity;
+    bool isEnemy_;
+    bool isJumping_;
+    bool isReset_;
+    bool isPlatform_;
 
     SDL_Texture *texture_;
 

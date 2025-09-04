@@ -19,7 +19,7 @@ void detect()
         bool v = state[i];
         if (v && !gPrev.test(i)) {
             const char* name = SDL_GetScancodeName(static_cast<SDL_Scancode>(i));
-            SDL_Log("Key pressed: %s", (name && *name) ? name : "Unknown");
+            // SDL_Log("Key pressed: %s", (name && *name) ? name : "Unknown");
         }
         gCurr.set(i, v);
         if (v) gDownList.push_back(static_cast<SDL_Scancode>(i));
