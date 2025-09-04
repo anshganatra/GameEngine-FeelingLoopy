@@ -5,16 +5,16 @@
 
 class Physics {
 private:
-    constexpr static float gravity = 9.81f; // Default gravity value (m/s^2)
-    constexpr static float deltaTime = 0.016f; // Assuming a default frame time of ~16ms (60 FPS)
+    static float gravity;    // pixels per second^2
+    static float deltaTime;  // seconds per frame (~1/60)
 public:
     static std::pair<std::pair<float,float>, std::pair<float,float>> applyPhysics(Entity& entity);
 
-    // Setters and getters for gravity
-    // void setGravity(float g);
-    float getGravity();
-    // void setDeltaTime(float dt);
-    float getDeltaTime();
+    // Setters and getters for tuning
+    static void setGravity(float g);
+    static float getGravity();
+    static void setDeltaTime(float dt);
+    static float getDeltaTime();
 };
 
 #endif 

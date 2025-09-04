@@ -1,5 +1,9 @@
 #include "physics.h"
 
+// Defaults tuned for pixel units: ~2000 px/s^2 feels platformer-like
+float Physics::gravity = 2000.0f;
+float Physics::deltaTime = 1.0f / 60.0f;
+
 std::pair<std::pair<float,float>, std::pair<float,float>> Physics::applyPhysics(Entity& e) {
     // Read current state
     float x = e.getX();
@@ -12,7 +16,6 @@ std::pair<std::pair<float,float>, std::pair<float,float>> Physics::applyPhysics(
 
     // Apply gravity if the entity is affected by it
     if (e.getisAffectedByGravity()) {
-       
         ay += gravity;
     }
 
@@ -26,18 +29,15 @@ std::pair<std::pair<float,float>, std::pair<float,float>> Physics::applyPhysics(
     return {{targetX, targetY}, {vx, vy}};
 }
 
-// void Physics::setGravity(float g) {
-//     gravity = g;
-// }
-
-float Physics::getGravity() {
-    return gravity;
+void Physics::setGravity(float g) { 
+    gravity = g; 
 }
-
-// void Physics::setDeltaTime(float dt) {
-//     deltaTime = dt;
-// }
-
-float Physics::getDeltaTime() {
-    return deltaTime;
+float Physics::getGravity() { 
+    return gravity; 
+}
+void Physics::setDeltaTime(float dt) { 
+    deltaTime = dt; 
+}
+float Physics::getDeltaTime() { 
+    return deltaTime; 
 }
