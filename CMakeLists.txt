@@ -17,6 +17,8 @@ add_executable(main
   ./src/engine/collision.cpp
   ./src/keyboardInput.cpp
   ./src/engine/physics.cpp
+  ./src/input.cpp
+  ./src/input_handler.cpp
 )
 
 target_link_libraries(main PRIVATE SDL3_image::SDL3_image SDL3::SDL3)

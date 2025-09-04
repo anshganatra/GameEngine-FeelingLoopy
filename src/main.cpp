@@ -3,6 +3,7 @@
 #include "engine/entity.h"
 #include <SDL3_image/SDL_image.h>
 #include "keyboardInput.h"
+#include "input_handler.h"
 
 const int gameWindowWidth = 1200;
 const int gameWindowHeight = 800;
@@ -43,6 +44,11 @@ void initialiseEntities() {
         0, 0, 0, 0, true, true, playerTexture, 4, 1, 20, 2, true, [](Entity&){});
     Entity* playerPtr = engine.addEntity(player);
     setControlledEntity(playerPtr);
+
+    //setControlledEntity(playerPtr);            // legacy keyboard input module
+
+    input_handler::setControlledEntity(playerPtr); // new input handler module
+    //input_handler::setKeyMapFor(playerPtr, input_handler::KeyMap{ SDL_SCANCODE_UP, SDL_SCANCODE_DOWN, SDL_SCANCODE_LEFT, SDL_SCANCODE_RIGHT, SDL_SCANCODE_LSHIFT });
 
     if (!platformTexture || !droneTexture || !playerTexture) {
         if (platformTexture) SDL_DestroyTexture(platformTexture);

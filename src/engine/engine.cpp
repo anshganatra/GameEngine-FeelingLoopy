@@ -2,6 +2,8 @@
 
 #include "physics.h"
 #include "collision.h"
+#include "../input.h"
+#include "../input_handler.h"
 #include <utility>
 
 Engine::Engine()
@@ -102,8 +104,9 @@ void Engine::run()
         {
             frame++;
 
-            // Handle keyboard input (moves controlled entity)
-            handleInput();
+            // Detect input snapshot for this frame and handle gameplay input
+            input::detect();
+            input_handler::handleInput();
             while (SDL_PollEvent(&event))
             {
                 if (event.type == SDL_EVENT_QUIT)
@@ -111,7 +114,7 @@ void Engine::run()
                     running = false;
                 }
                 // Forward discrete events (mouse, keydown) to input module
-                handleEvent(event);
+                input_handler::handleEvent(event);
             }
 
             // Clear frame
@@ -120,17 +123,20 @@ void Engine::run()
 
             // Update, animate and render entities
             for (auto &e : entities_)
-            {
-                handleSpriteSheetAnimation(e, frame);
-                handleAutoMovingEntityUpdate(e);
+            {   
+                if (!input_handler::isPaused()) {
+                    handleSpriteSheetAnimation(e, frame);
+                    handleAutoMovingEntityUpdate(e);
+                    
 
-                // Allow custom per-entity updates
-                e.update();
+                    // Allow custom per-entity updates
+                    e.update();
 
-                // Apply physics (velocity, acceleration, collisions)
-                std::pair<std::pair<float, float>, std::pair<float, float>> targetVectors = Physics::applyPhysics(e);
+                    // Apply physics (velocity, acceleration, collisions)
+                    std::pair<std::pair<float, float>, std::pair<float, float>> targetVectors = Physics::applyPhysics(e);
 
-                handle_collision(e, targetVectors.first.first, targetVectors.first.second, targetVectors.second.first, targetVectors.second.second);
+                    handle_collision(e, targetVectors.first.first, targetVectors.first.second, targetVectors.second.first, targetVectors.second.second);
+                }
 
                 // Source rectangle from spritesheet
                 SDL_FRect src{static_cast<float>(e.getCurrentFrameColumn()) * e.getWidth(), e.getCurrentFrameRow() * e.getHeight(), e.getWidth(), e.getHeight()};
@@ -144,6 +150,18 @@ void Engine::run()
                 {
                     SDL_RenderTexture(renderer_, tex, &src, &dst);
                 }
+            }
+
+            // If paused, draw a translucent overlay with a pause icon
+            if (input_handler::isPaused()) {
+                int irw = 0, irh = 0;
+                SDL_GetRenderOutputSize(renderer_, &irw, &irh);
+                const float rw = static_cast<float>(irw);
+                const float rh = static_cast<float>(irh);
+                SDL_SetRenderDrawBlendMode(renderer_, SDL_BLENDMODE_BLEND);
+                SDL_SetRenderDrawColor(renderer_, 0, 0, 0, 160);
+                SDL_FRect fade{0.0f, 0.0f, rw, rh};
+                SDL_RenderFillRect(renderer_, &fade);
             }
 
             SDL_RenderPresent(renderer_);
