@@ -26,18 +26,21 @@ void initialiseEntities() {
 
     // Initialise Automoving entity
     SDL_Texture* droneTexture = loadTexture(renderer, "media/cyberpunk_enemy_drone_move.png");
-    Entity drone(std::string("Drone"), gameWindowWidth/3, gameWindowHeight/3, droneTexture->w/8, droneTexture->h/8, 
-        0, 0, 0, 0, true, false, droneTexture, 8, 8, 20, 0.5, true, [](Entity&){});
-    // Define path points for the drone to follow
-    // drone.setPath({{gameWindowWidth/4, gameWindowHeight/4},
-    //                {gameWindowWidth/2, gameWindowHeight/2},
-    //                {gameWindowWidth*2/3, gameWindowHeight/3}});
+    Entity drone(std::string("Drone"), 10, 10, droneTexture->w/8, droneTexture->h/8, 
+        0, 0, 0, 0, true, false, droneTexture, 8, 8, 10, 0.5, false,  [](Entity&){});
+    // Define velocity vectors (vx, vy) with number of updates for the drone
+    std::vector<Entity::PathVector> pathVectors = {
+        Entity::PathVector{25.0f, 0.0f, 1000},   // move right
+        Entity::PathVector{0.0f, 40.0f, 500},    // move down
+        Entity::PathVector{25.0f, -25.0f, 700}   // move up-left diagonally
+    };
+    drone.setPathVectors(pathVectors);
     engine.addEntity(drone);
 
     //Initialise Controllable Player Entity
     SDL_Texture* playerTexture = loadTexture(renderer, "media/darkworld_character_cainhurst_right.png");
     Entity player(std::string("Player"), 2*gameWindowWidth/3, gameWindowHeight/3, playerTexture->w/4, playerTexture->h, 
-        0, 0, 0, 0, true, false, playerTexture, 4, 1, 33, 2, true, [](Entity&){});
+        0, 0, 0, 0, true, true, playerTexture, 4, 1, 20, 2, true, [](Entity&){});
     Entity* playerPtr = engine.addEntity(player);
     setControlledEntity(playerPtr);
 

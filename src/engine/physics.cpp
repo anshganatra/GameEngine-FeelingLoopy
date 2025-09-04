@@ -8,11 +8,11 @@ std::pair<std::pair<float,float>, std::pair<float,float>> Physics::applyPhysics(
     float vy = e.getVelocityY();
     float ax = e.getAccelerationX();
     float ay = e.getAccelerationY();
-    
     if (!e.isMovable()) return {{x, y}, {vx, vy}};
 
     // Apply gravity if the entity is affected by it
     if (e.getisAffectedByGravity()) {
+       
         ay += gravity;
     }
 
