@@ -136,6 +136,7 @@ void Engine::run()
             // Update, animate and render entities
             for (auto &e : entities_)
             {   
+                if(e.isDisabled()) continue;
                 if (!input_handler::isPaused()) {
 
                     if(e.isControllable() && e.isReset()) {
@@ -149,9 +150,8 @@ void Engine::run()
                     handleSpriteSheetAnimation(e, frame);
                     handleAutoMovingEntityUpdate(e);
                     
-
-                    // Allow custom per-entity updates
-                    e.update();
+                    // // Allow custom per-entity updates
+                    // e.update();
 
                     // Apply physics (velocity, acceleration, collisions)
                     std::pair<std::pair<float, float>, std::pair<float, float>> targetVectors = Physics::applyPhysics(e);

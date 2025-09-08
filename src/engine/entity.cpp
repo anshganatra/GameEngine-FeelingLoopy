@@ -17,6 +17,8 @@ Entity::Entity(std::string name, float x, float y, float width, float height, SD
       isJumping_(false),
       isReset_(false),
       isPlatform_(isPlatform),
+      isDisabled_(false),
+      isCollidable_(true),
       texture_(texture),
       frameColumnCount_(frameColumnCount),
       frameRowCount_(frameRowCount),
@@ -32,7 +34,7 @@ Entity::Entity(std::string name, float x, float y, float width, float height, SD
 
 // Constructor for the Non-static entities
 Entity::Entity(std::string name, float x, float y, float width, float height, float velocityX, float velocityY, float accelerationX,
-               float accelerationY, bool isMovable, bool isControllable, bool isEnemy, bool isPlatform, SDL_Texture *texture, int frameColumnCount,
+               float accelerationY, bool isMovable, bool isControllable, bool isEnemy, bool isPlatform, bool isCollidable, SDL_Texture *texture, int frameColumnCount,
                int frameRowCount, int animationDelay, float scale, bool isAffectedByGravity, const std::function<void(Entity &)> &updateFunction)
     : name_(name),
       x_(x),
@@ -49,6 +51,8 @@ Entity::Entity(std::string name, float x, float y, float width, float height, fl
       isJumping_(false),
       isReset_(false),
       isPlatform_(isPlatform),
+      isCollidable_(isCollidable),
+      isDisabled_(false),
       texture_(texture),
       frameColumnCount_(frameColumnCount),
       frameRowCount_(frameRowCount),
@@ -135,6 +139,16 @@ bool Entity::isPlatform() const
 bool Entity::isReset() const
 {
     return isReset_;
+}
+
+bool Entity::isCollidable() const
+{
+    return isCollidable_;
+}
+
+bool Entity::isDisabled() const
+{
+    return isDisabled_;
 }
 
 bool Entity::getisAffectedByGravity() const
@@ -267,9 +281,19 @@ void Entity::isPlatform(bool val)
     isPlatform_ = val;
 }
 
+void Entity::isCollidable(bool val)
+{
+    isCollidable_ = val;
+}
+
 void Entity::setisAffectedByGravity(bool val)
 {
     isAffectedByGravity = val;
+}
+
+void Entity::setDisabled(bool val)
+{
+    isDisabled_ = val;
 }
 
 void Entity::setFrameColumnCount(int frameColumnCount)

@@ -92,11 +92,12 @@ inline bool wouldCollideWithAny(Entity* moving, float newX, float newY,
 
     const auto& entities = engine.getEntities();
     for (const auto& other : entities) {
+        if(other.isDisabled()) continue;
         if (&other == moving) continue;
         const SDL_FRect orc = makeRect(other);
         const bool xOverlap = (pr.x < orc.x + orc.w) && (pr.x + pr.w > orc.x);
         const bool yOverlap = (pr.y < orc.y + orc.h) && (pr.y + pr.h > orc.y);
-        if (!(xOverlap && yOverlap)) continue;
+        if (!(xOverlap && yOverlap) || !other.isCollidable()) continue;
 
         if(other.isEnemy() && moving->isControllable()) {
             moving->setReset(true);
@@ -106,6 +107,8 @@ inline bool wouldCollideWithAny(Entity* moving, float newX, float newY,
         if(other.isPlatform() && moving->isControllable()) {
             moving->setJumping(false);
         }
+
+        other.getUpdateFunction()(const_cast<Entity&>(other)); // Call on-collision update function
 
         collided = true;
         if (outMaxPenX && dirX != 0.0f) {
