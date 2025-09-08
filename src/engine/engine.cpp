@@ -14,7 +14,6 @@ Engine::~Engine()
     cleanup();
 }
 
-// TODO add params for the title, height and width of the game window
 bool Engine::init(const char *title, int width, int height)
 {
     if (!SDL_Init(SDL_INIT_VIDEO))
@@ -30,8 +29,14 @@ bool Engine::init(const char *title, int width, int height)
         return false;
     }
 
+    SDL_SetWindowResizable(window_, true);
+    // Initialize logical render size baseline and default scaling mode (delegated)
+    scaler_.init(window_, renderer_, width, height, entities_);
+    // Register scaling controller with input to handle key toggles
+    input_handler::setScalingController(&scaler_, renderer_, &entities_);
     return true;
 }
+
 
 void handleSpriteSheetAnimation(Entity &e, unsigned long long frame)
 {
@@ -107,12 +112,18 @@ void Engine::run()
 
             // Detect input snapshot for this frame and handle gameplay input
             input::detect();
+
+            // Scaling toggles are handled in input_handler now
             input_handler::handleInput();
             while (SDL_PollEvent(&event))
             {
                 if (event.type == SDL_EVENT_QUIT)
                 {
                     running = false;
+                }
+                else if (event.type == SDL_EVENT_MOUSE_WHEEL)
+                {
+                    scaler_.onMouseWheel(event, window_);
                 }
                 // Forward discrete events (mouse, keydown) to input module
                 input_handler::handleEvent(event);

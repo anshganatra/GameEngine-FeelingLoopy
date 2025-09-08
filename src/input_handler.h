@@ -3,6 +3,7 @@
 
 #include <SDL3/SDL.h>
 #include "engine/entity.h"
+#include "engine/scaling.h"
 
 namespace input_handler {
 
@@ -32,5 +33,8 @@ void handleEvent(const SDL_Event& e);
 
 // Paused state (toggled with Escape)
 bool isPaused();
+
+// Optional: register scaling controller for render-scale toggles
+void setScalingController(scaling::Controller* controller, SDL_Renderer* renderer, std::vector<Entity>* entities);
 
 }

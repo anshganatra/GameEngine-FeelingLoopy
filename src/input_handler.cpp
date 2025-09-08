@@ -10,6 +10,11 @@ namespace input_handler {
 static Entity* gControlledEntity = nullptr;
 static bool gPaused = false;
 
+// Optional scaling control
+static scaling::Controller* gScaler = nullptr;
+static SDL_Renderer* gRenderer = nullptr;
+static std::vector<Entity>* gEntities = nullptr;
+
 
 // Tunables
 static float gMoveSpeed = 300.0f;   // px/s
@@ -29,6 +34,12 @@ void clearKeyMapFor(Entity* e) {
 }
 void setDefaultKeyMap(const input_handler::KeyMap& map) {
     gDefaultMap = map;
+}
+
+void setScalingController(scaling::Controller* controller, SDL_Renderer* renderer, std::vector<Entity>* entities) {
+    gScaler = controller;
+    gRenderer = renderer;
+    gEntities = entities;
 }
 
 static const input_handler::KeyMap& keymapFor(const Entity* e) {
@@ -72,6 +83,23 @@ void handleInput()
     if (input::pressed(SDL_SCANCODE_ESCAPE)) {
         gPaused = !gPaused;
         SDL_Log("%s", gPaused ? "Paused" : "Resumed");
+    }
+
+    // Toggle render scaling modes with Ctrl+N / Ctrl+M
+    const bool ctrlDown = input::down(SDL_SCANCODE_LCTRL) || input::down(SDL_SCANCODE_RCTRL);
+    if (gScaler && gRenderer && gEntities) {
+        if (ctrlDown && input::pressed(SDL_SCANCODE_N)) {
+            if (gScaler->mode != scaling::ScalingMode::ProportionalLogical) {
+                gScaler->setMode(scaling::ScalingMode::ProportionalLogical, gRenderer, *gEntities);
+                SDL_Log("Scaling mode: Proportional (logical letterbox)");
+            }
+        }
+        if (ctrlDown && input::pressed(SDL_SCANCODE_M)) {
+            if (gScaler->mode != scaling::ScalingMode::ConstantPixels) {
+                gScaler->setMode(scaling::ScalingMode::ConstantPixels, gRenderer, *gEntities);
+                SDL_Log("Scaling mode: Constant pixel size");
+            }
+        }
     }
 
     // If explicit controlled entity is set, drive it with its map.

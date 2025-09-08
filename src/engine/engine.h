@@ -2,6 +2,7 @@
 #define ENGINE_H
 
 #include "entity.h"
+#include "scaling.h"
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
 #include <SDL3_image/SDL_image.h>
@@ -15,6 +16,7 @@ private:
     SDL_Window *window_;
     SDL_Renderer *renderer_;
     std::vector<Entity> entities_;
+    scaling::Controller scaler_; // Rendering scaling controller
 
 public:
     Engine();

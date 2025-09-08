@@ -13,6 +13,7 @@ add_subdirectory(vendored/SDL_image EXCLUDE_FROM_ALL)
 add_executable(main
   ./src/main.cpp
   ./src/engine/engine.cpp
+  ./src/engine/scaling.cpp
   ./src/engine/entity.cpp
   ./src/engine/collision.cpp
   ./src/engine/physics.cpp
