@@ -106,7 +106,6 @@ void Engine::run()
     {
         ++tick;
         if (tick % 10000000 == 0)
-        if (tick % 10000000 == 0)
         {
             frame++;
 

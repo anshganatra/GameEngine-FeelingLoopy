@@ -94,10 +94,10 @@ inline bool wouldCollideWithAny(Entity* moving, float newX, float newY,
     for (const auto& other : entities) {
         if(other.isDisabled()) continue;
         if (&other == moving) continue;
-        const SDL_FRect orc = makeRect(other);
-        const bool xOverlap = (pr.x < orc.x + orc.w) && (pr.x + pr.w > orc.x);
-        const bool yOverlap = (pr.y < orc.y + orc.h) && (pr.y + pr.h > orc.y);
+        auto [xOverlap, yOverlap] = areEntitiesColliding(next, other);
         if (!(xOverlap && yOverlap) || !other.isCollidable()) continue;
+        
+        const SDL_FRect orc = makeRect(other);
 
         if(other.isEnemy() && moving->isControllable()) {
             moving->setReset(true);
@@ -125,4 +125,12 @@ inline bool wouldCollideWithAny(Entity* moving, float newX, float newY,
     if (outMaxPenY) *outMaxPenY = maxPenY;
     
     return collided;
+}
+
+std::pair<bool, bool> areEntitiesColliding(const Entity &a, const Entity &b) {
+    const SDL_FRect ra = makeRect(a);
+    const SDL_FRect rb = makeRect(b);
+    const bool xOverlap = (ra.x < rb.x + rb.w) && (ra.x + ra.w > rb.x);
+    const bool yOverlap = (ra.y < rb.y + rb.h) && (ra.y + ra.h > rb.y);
+    return {xOverlap, yOverlap};
 }
